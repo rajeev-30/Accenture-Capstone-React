@@ -1,0 +1,80 @@
+[
+  {
+    "id": 101,
+    "tname": "Pepperoni",
+    "price": 110,
+    "image": "https://thumb1.shutterstock.com/display_pic_with_logo/55755/161642033/stock-photo-single-slice-of-pepperoni-161642033.jpg"
+  },
+  {
+    "id": 102,
+    "tname": "Mushroom",
+    "price": 35,
+    "image": "https://thumb9.shutterstock.com/display_pic_with_logo/1207547/568114672/stock-photo-fresh-cultivated-champignon-mushroom-568114672.jpg"
+  },
+  {
+    "id": 103,
+    "tname": "Black beans",
+    "price": 45,
+    "image": "https://thumb1.shutterstock.com/display_pic_with_logo/180783430/755093356/stock-photo-black-beans-grain-755093356.jpg"
+  },
+  {
+    "id": 104,
+    "tname": "Black olive",
+    "price": 50,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/137002/244097551/stock-photo-black-cut-olive-244097551.jpg"
+  },
+  {
+    "id": 105,
+    "tname": "Green olive",
+    "price": 50,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/4526794/639321544/stock-photo-stuffed-olives-639321544.jpg"
+  },
+  {
+    "id": 106,
+    "tname": "Jalapeno",
+    "price": 45,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/999701/250939984/stock-photo-sliced-green-jalapeno-250939984.jpg"
+  },
+  {
+    "id": 107,
+    "tname": "Chicken",
+    "price": 60,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/371512/583587001/stock-photo-fresh-raw-chicken-583587001.jpg"
+  },
+  {
+    "id": 108,
+    "tname": "Tomato",
+    "price": 20,
+    "image": "https://thumb1.shutterstock.com/display_pic_with_logo/721492/400195690/stock-photo-tomatoes-isolated-400195690.jpg"
+  },
+  {
+    "id": 119,
+    "tname": "Red peprika",
+    "price": 30,
+    "image": "https://thumb9.shutterstock.com/display_pic_with_logo/676765/343609895/stock-photo-chili-pepper-isolated-343609895.jpg"
+  },
+  {
+    "id": 110,
+    "tname": "Paneer",
+    "price": 45,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/605002/195341264/stock-photo-piece-of-cheese-195341264.jpg"
+  },
+  {
+    "id": 111,
+    "tname": "Fried Onion",
+    "price": 18,
+    "image": "https://thumb1.shutterstock.com/display_pic_with_logo/152950/630261116/stock-photo-delicious-crispy-fried-onion-630261116.jpg"
+  },
+  {
+    "id": 112,
+    "tname": "Capsicum",
+    "price": 15,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/259963/259963,1235208469,1/stock-photo-vegetables-259963.jpg"
+  },
+  {
+    "id": 114,
+    "tname": "Sweet corn",
+    "price": 38,
+    "image": "https://thumb7.shutterstock.com/display_pic_with_logo/3102608/706329457/stock-photo-sweet-corn-in-wicker-706329457.jpg"
+  }
+]

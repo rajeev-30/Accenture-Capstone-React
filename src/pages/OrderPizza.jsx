@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { addToCart } from '../store/cartSlice';
+import {
+  addToCart,
+  incrementQuantity,
+  decrementQuantity,
+  removeFromCart,
+  selectCartItems,
+} from '../store/cartSlice';
 
 const OrderPizza = () => {
   const [pizzas, setPizzas] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
 
   useEffect(() => {
     axios
@@ -25,6 +32,8 @@ const OrderPizza = () => {
     dispatch(addToCart(pizza));
   };
 
+  const getCartItem = (pizzaId) => cartItems.find((item) => item.id === pizzaId);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -36,7 +45,9 @@ const OrderPizza = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {pizzas.map((pizza) => (
+        {pizzas.map((pizza) => {
+          const cartItem = getCartItem(pizza.id);
+          return (
           <div
             key={pizza.id}
             className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 flex gap-4 hover:shadow-md transition-shadow duration-200"
@@ -77,12 +88,36 @@ const OrderPizza = () => {
                 </span>
               </div>
 
-              <button
-                onClick={() => handleAddToCart(pizza)}
-                className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-4 py-2 rounded transition-colors duration-200 cursor-pointer"
-              >
-                Add to Cart
-              </button>
+              {cartItem ? (
+                <div className="flex items-center gap-0">
+                  <button
+                    onClick={() =>
+                      cartItem.quantity === 1
+                        ? dispatch(removeFromCart(pizza.id))
+                        : dispatch(decrementQuantity(pizza.id))
+                    }
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold w-8 h-8 rounded-l flex items-center justify-center cursor-pointer border-none text-lg"
+                  >
+                    -
+                  </button>
+                  <span className="bg-white border-y border-gray-200 w-10 h-8 flex items-center justify-center text-sm font-semibold">
+                    {cartItem.quantity}
+                  </span>
+                  <button
+                    onClick={() => dispatch(incrementQuantity(pizza.id))}
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold w-8 h-8 rounded-r flex items-center justify-center cursor-pointer border-none text-lg"
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => handleAddToCart(pizza)}
+                  className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-4 py-2 rounded transition-colors duration-200 cursor-pointer"
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
 
             <div className="w-36 h-36 flex-shrink-0">
@@ -96,7 +131,8 @@ const OrderPizza = () => {
               />
             </div>
           </div>
-        ))}
+        );
+      })}
       </div>
     </div>
   );

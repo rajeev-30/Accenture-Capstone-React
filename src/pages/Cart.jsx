@@ -2,27 +2,28 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectCartItems,
-  selectCartIngredients,
   selectPizzaSubtotal,
   selectIngredientsSubtotal,
+  selectAggregatedIngredients,
   selectCartTotal,
   incrementQuantity,
   decrementQuantity,
   removeFromCart,
   clearCart,
 } from '../store/cartSlice';
+import { ArrowBigDown, ArrowDown, Trash2 } from 'lucide-react';
 
 const Cart = () => {
   const items = useSelector(selectCartItems);
-  const ingredients = useSelector(selectCartIngredients);
   const pizzaSubtotal = useSelector(selectPizzaSubtotal);
   const ingredientsSubtotal = useSelector(selectIngredientsSubtotal);
+  const aggregatedIngredients = useSelector(selectAggregatedIngredients);
   const total = useSelector(selectCartTotal);
   const dispatch = useDispatch();
   const [showIngredients, setShowIngredients] = useState(false);
 
   const handlePay = () => {
-    if (items.length === 0 && ingredients.length === 0) {
+    if (items.length === 0) {
       alert('Your cart is empty! Please add items before proceeding.');
       return;
     }
@@ -34,13 +35,18 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
+  const allItemsSubtotal = items.reduce(
+    (total, item) => total + Number(item.price) * item.quantity,
+    0
+  );
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">My Cart</h2>
 
-          {items.length === 0 && ingredients.length === 0 ? (
+          {items.length === 0 ? (
             <p className="text-gray-500 text-center py-8">Your cart is empty.</p>
           ) : (
             <>
@@ -58,26 +64,42 @@ const Cart = () => {
                     }}
                   />
 
-                  <span
-                    className={`w-5 h-5 border-2 flex-shrink-0 flex items-center justify-center ${
-                      item.type === 'veg' ? 'border-green-600' : 'border-red-600'
-                    }`}
-                  >
+                  {item.type !== 'custom' && (
                     <span
-                      className={`w-2.5 h-2.5 rounded-full ${
-                        item.type === 'veg' ? 'bg-green-600' : 'bg-red-600'
+                      className={`w-5 h-5 border-2 flex-shrink-0 flex items-center justify-center ${
+                        item.type === 'veg' ? 'border-green-600' : 'border-red-600'
                       }`}
-                    ></span>
-                  </span>
+                    >
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full ${
+                          item.type === 'veg' ? 'bg-green-600' : 'bg-red-600'
+                        }`}
+                      ></span>
+                    </span>
+                  )}
+                  {item.type === 'custom' && (
+                    <span className="w-5 h-5 border-2 border-amber-500 flex-shrink-0 flex items-center justify-center">
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    </span>
+                  )}
 
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-800 text-sm">{item.name}</p>
+                    {item.isCustom && item.selectedIngredients && (
+                      <p className="text-gray-400 text-xs mt-0.5 leading-tight">
+                        {item.selectedIngredients.map((ing) => ing.tname).join(', ')}
+                      </p>
+                    )}
                     <p className="text-gray-500 text-xs">₹{Number(item.price)}</p>
                   </div>
 
                   <div className="flex items-center gap-0">
                     <button
-                      onClick={() => dispatch(decrementQuantity(item.id))}
+                      onClick={() =>
+                        item.quantity === 1
+                          ? dispatch(removeFromCart(item.id))
+                          : dispatch(decrementQuantity(item.id))
+                      }
                       className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold w-8 h-8 rounded-l flex items-center justify-center cursor-pointer border-none text-lg"
                     >
                       -
@@ -87,7 +109,7 @@ const Cart = () => {
                     </span>
                     <button
                       onClick={() => dispatch(incrementQuantity(item.id))}
-                      className="bg-green-500 hover:bg-green-600 text-white font-bold w-8 h-8 rounded-r flex items-center justify-center cursor-pointer border-none text-lg"
+                      className="bg-gray-500 hover:bg-gray-600 text-white font-bold w-8 h-8 rounded-r flex items-center justify-center cursor-pointer border-none text-lg"
                     >
                       +
                     </button>
@@ -102,7 +124,7 @@ const Cart = () => {
                     className="text-red-500 hover:text-red-700 cursor-pointer bg-transparent border-none text-xl"
                     title="Remove from cart"
                   >
-                    🗑️
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
               ))}
@@ -110,7 +132,7 @@ const Cart = () => {
               {items.length > 0 && (
                 <div className="text-right mt-4 pt-4 border-t border-gray-200">
                   <p className="text-gray-700 font-semibold">
-                    Sub Total : ₹{pizzaSubtotal.toFixed(2)}
+                    Sub Total : ₹{allItemsSubtotal.toFixed(2)}
                   </p>
                 </div>
               )}
@@ -139,7 +161,7 @@ const Cart = () => {
                       showIngredients ? 'rotate-180' : ''
                     }`}
                   >
-                    ▼
+                    <ArrowDown className='w-4 h-4'/>
                   </span>
                 </span>
                 <span className="text-gray-800 font-semibold text-sm">
@@ -147,12 +169,19 @@ const Cart = () => {
                 </span>
               </div>
 
-              {showIngredients && ingredients.length > 0 && (
+              {showIngredients && aggregatedIngredients.length > 0 && (
                 <div className="mt-2 pl-4 space-y-1">
-                  {ingredients.map((ing) => (
+                  {aggregatedIngredients.map((ing) => (
                     <div key={ing.id} className="flex justify-between text-xs text-gray-500">
-                      <span>{ing.tname}</span>
-                      <span>₹{Number(ing.price).toFixed(2)}</span>
+                      <span>
+                        {ing.tname}
+                        {ing.count > 1 && (
+                          <span className=" ml-1">
+                            (x{ing.count})
+                          </span>
+                        )}
+                      </span>
+                      <span>₹{(Number(ing.price) * ing.count).toFixed(2)}</span>
                     </div>
                   ))}
                 </div>

@@ -1,3 +1,7 @@
+import chef from "../assets/chef.jpg"
+import clock from "../assets/clock.jpg"
+import ingredients from "../assets/ingredients.png"
+
 const Home = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -28,7 +32,7 @@ const Home = () => {
       <section className="mb-12 flex flex-col md:flex-row items-center gap-8">
         <div className="md:w-1/2">
           <img
-            src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&h=350&fit=crop"
+            src={ingredients}
             alt="Fresh pizza ingredients"
             className="w-full h-64 object-cover rounded-lg shadow-md"
           />
@@ -47,7 +51,7 @@ const Home = () => {
       <section className="mb-12 flex flex-col md:flex-row-reverse items-center gap-8">
         <div className="md:w-1/2">
           <img
-            src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=500&h=350&fit=crop"
+            src={chef}
             alt="Our talented chef"
             className="w-full h-64 object-cover rounded-lg shadow-md"
           />
@@ -65,7 +69,7 @@ const Home = () => {
       <section className="mb-12 flex flex-col md:flex-row items-center gap-8">
         <div className="md:w-1/2">
           <img
-            src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=350&fit=crop"
+            src={clock}
             alt="Fast delivery timer"
             className="w-full h-64 object-cover rounded-lg shadow-md"
           />

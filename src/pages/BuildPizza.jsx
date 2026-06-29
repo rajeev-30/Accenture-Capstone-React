@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { addIngredient, removeIngredient } from '../store/cartSlice';
+import { addToCart } from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
 const BuildPizza = () => {
@@ -53,10 +53,22 @@ const BuildPizza = () => {
       return;
     }
 
-    Object.values(selected).forEach((ingredient) => {
-      dispatch(addIngredient(ingredient));
-    });
+    const selectedList = Object.values(selected);
+    const totalPrice = selectedList.reduce((sum, ing) => sum + Number(ing.price), 0);
 
+    const customPizza = {
+      id: `custom-${Date.now()}`,
+      name: 'Build Ur Pizza',
+      type: 'custom',
+      isCustom: true,
+      price: totalPrice,
+      image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop',
+      description: 'Custom built pizza with selected ingredients',
+      selectedIngredients: selectedList,
+    };
+
+    dispatch(addToCart(customPizza));
+    setSelected({});
     navigate('/cart');
   };
 
@@ -125,7 +137,7 @@ const BuildPizza = () => {
       </div>
 
       <div className="mt-6 text-center">
-        <p className="text-orange-500 font-bold text-lg">
+        <p className="text-blue-800 font-bold text-lg">
           Total Cost : {totalCost}
         </p>
       </div>

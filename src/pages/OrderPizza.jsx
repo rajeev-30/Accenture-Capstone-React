@@ -105,7 +105,7 @@ const OrderPizza = () => {
                   </span>
                   <button
                     onClick={() => dispatch(incrementQuantity(pizza.id))}
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold w-8 h-8 rounded-r flex items-center justify-center cursor-pointer border-none text-lg"
+                    className="bg-gray-500 hover:bg-gray-600 text-white font-bold w-8 h-8 rounded-r flex items-center justify-center cursor-pointer border-none text-lg"
                   >
                     +
                   </button>

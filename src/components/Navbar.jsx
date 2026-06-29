@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartCount } from '../store/cartSlice';
 import logo from '../assets/logo.jpeg';
+import { ShoppingCart } from 'lucide-react';
 
 const Navbar = () => {
   const cartCount = useSelector(selectCartCount);
@@ -37,9 +38,9 @@ const Navbar = () => {
         to="/cart"
         className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-black font-semibold px-4 py-2 rounded transition-colors duration-200 no-underline text-sm"
       >
-        🛒 Shopping Cart
+        <ShoppingCart className='w-5 h-5'/> Shopping Cart
         {cartCount > 0 && (
-          <span className="bg-blue-700 text-white text-xs font-bold px-2 py-0.5 rounded ml-1 min-w-[20px] text-center">
+          <span className="bg-gray-800 text-white text-xs font-bold px-2 py-0.5 rounded ml-1 min-w-[20px] text-center">
             {cartCount}
           </span>
         )}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   selectCartItems,
   selectPizzaSubtotal,
@@ -11,7 +12,7 @@ import {
   removeFromCart,
   clearCart,
 } from '../store/cartSlice';
-import { ArrowBigDown, ArrowDown, Trash2 } from 'lucide-react';
+import { ArrowDown, Trash2 } from 'lucide-react';
 
 const Cart = () => {
   const items = useSelector(selectCartItems);
@@ -20,6 +21,7 @@ const Cart = () => {
   const aggregatedIngredients = useSelector(selectAggregatedIngredients);
   const total = useSelector(selectCartTotal);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showIngredients, setShowIngredients] = useState(false);
 
   const handlePay = () => {
@@ -27,8 +29,7 @@ const Cart = () => {
       alert('Your cart is empty! Please add items before proceeding.');
       return;
     }
-    alert(`Payment successful! Total amount: ₹${total.toFixed(2)}`);
-    dispatch(clearCart());
+    navigate('/checkout', { state: { total } });
   };
 
   const handleClear = () => {

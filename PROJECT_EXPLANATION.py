@@ -1048,6 +1048,227 @@ A:  - Add a backend API (Node.js/Express) instead of static JSON
     - Deploy to Vercel or Netlify
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q21: What is a component in React?
+A:  A component is a reusable, self-contained piece of UI. It's a JavaScript
+    function (or class) that returns JSX. In this project, Navbar, Footer,
+    Home, OrderPizza, BuildPizza, Cart, and Checkout are all components.
+    Components can accept inputs (props) and manage their own internal state.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q22: What is the difference between state and props?
+A:  - STATE is data managed INSIDE a component (using useState). It can be
+      changed by the component itself. Example: `const [selected, setSelected] = useState({})`
+    - PROPS are data passed FROM a parent component to a child component.
+      They are READ-ONLY — the child cannot modify them.
+    - In our project, we use Redux instead of props for shared data, and
+      useState for component-local data like `loading`, `selected`, etc.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q23: What is the difference between functional and class components?
+A:  - CLASS components use `class App extends React.Component` with lifecycle
+      methods like componentDidMount, render(), etc.
+    - FUNCTIONAL components are plain JavaScript functions that return JSX.
+      They use Hooks (useState, useEffect) instead of lifecycle methods.
+    - Our entire project uses functional components — this is the modern
+      and recommended approach since React 16.8+ (when Hooks were introduced).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q24: What is the component lifecycle in React?
+A:  Every component goes through 3 phases:
+    1. MOUNTING   — Component is created and inserted into the DOM
+                    (useEffect with [] runs here)
+    2. UPDATING   — Component re-renders due to state/props change
+                    (useEffect with [dependency] runs here)
+    3. UNMOUNTING — Component is removed from the DOM
+                    (useEffect cleanup function runs here)
+    In our Checkout.jsx, the useEffect cleanup clears the cart on unmount.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q25: What is Immer? How does Redux Toolkit use it?
+A:  Immer is a library that lets you write "mutating" code while producing
+    immutable state under the hood. In plain Redux, you must return a NEW
+    state object: `return { ...state, items: [...state.items, newItem] }`.
+    With Redux Toolkit (which uses Immer), you can write:
+    `state.items.push(newItem)` — Immer detects the mutation and produces
+    a new immutable copy automatically. This makes reducer code much simpler.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q26: What is conditional rendering? Where is it used in your project?
+A:  Conditional rendering means showing different UI based on some condition.
+    Techniques used in this project:
+    1. && operator: `{cartCount > 0 && <span>{cartCount}</span>}` (Navbar badge)
+    2. Ternary: `{cartItem ? <QuantityControls/> : <AddButton/>}` (OrderPizza)
+    3. if/return: `if (loading) return <Spinner/>` (OrderPizza, BuildPizza)
+    4. && with state: `{showIngredients && <IngredientList/>}` (Cart accordion)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q27: What is a Single Page Application (SPA)?
+A:  An SPA loads a single HTML page and dynamically updates the content
+    as the user navigates — WITHOUT full page reloads. Our Pizzeria app is
+    an SPA. The index.html loads once, then React Router handles navigation
+    by swapping components. This makes navigation instant and smooth.
+    The URL changes but the browser never requests a new page from the server.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q28: What is npm? What is the difference between dependencies and devDependencies?
+A:  npm (Node Package Manager) manages JavaScript packages/libraries.
+    - dependencies: Libraries needed at RUNTIME (in the browser).
+      Examples: react, react-router-dom, @reduxjs/toolkit, axios
+    - devDependencies: Libraries needed only during DEVELOPMENT/BUILD.
+      Examples: vite, tailwindcss, @vitejs/plugin-react
+    In production, only dependencies are included in the final bundle.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q29: What are the rules of React Hooks?
+A:  1. Only call hooks at the TOP LEVEL — never inside loops, conditions,
+       or nested functions. This ensures hooks are called in the same order
+       every render.
+    2. Only call hooks from REACT FUNCTIONS — either functional components
+       or custom hooks. Never from regular JavaScript functions.
+    3. Hooks must start with the word "use" (useState, useEffect, etc.)
+    If you break these rules, React cannot correctly track the hook state.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q30: How do you pass data between pages/routes in React Router?
+A:  Several ways:
+    1. URL PARAMS: `/pizza/:id` → useParams() to read the id
+    2. QUERY STRINGS: `/order?sort=price` → useSearchParams()
+    3. ROUTE STATE: navigate('/checkout', { state: { total } }) →
+       useLocation().state.total on the receiving page.
+    In our project, we use ROUTE STATE to pass the cart total from
+    Cart.jsx to Checkout.jsx so it survives even after clearCart().
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q31: What is a controlled component?
+A:  A controlled component is a form element whose value is controlled by
+    React state. The input's value is set by state, and onChange updates
+    the state. Example: <input value={form.name} onChange={handleChange} />.
+    This means React is the "single source of truth" for the input value.
+    All form inputs in our project use this pattern.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q32: What is the Context API? How is it different from Redux?
+A:  Context API is React's built-in solution for passing data through the
+    component tree without props. Redux ALSO solves this problem but adds:
+    - A predictable state container with actions and reducers
+    - DevTools for time-travel debugging
+    - Middleware support (for async operations)
+    - Better performance for frequent updates (Redux optimizes re-renders)
+    Context is simpler but can cause unnecessary re-renders in large apps.
+    Redux is better for complex, frequently-changing state like our cart.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q33: What is React.Fragment (<> </>)?
+A:  Fragment lets you group multiple elements without adding an extra DOM
+    node. In JSX, you can only return ONE root element. Instead of wrapping
+    in a <div>, you use <React.Fragment> or the shorthand <> </>.
+    In our Cart.jsx, we use <> </> (Fragment) to wrap the items list and
+    subtotal without introducing an unnecessary <div> in the DOM.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q34: What is reconciliation in React?
+A:  Reconciliation is React's process of comparing the old Virtual DOM
+    with the new Virtual DOM to determine the minimum set of DOM changes
+    needed. React uses a "diffing algorithm" that:
+    1. Compares elements of the same type (updates attributes only)
+    2. Destroys and recreates elements of different types
+    3. Uses "key" props to match children in lists efficiently
+    This is what makes React fast — it batches and minimizes real DOM updates.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q35: What is async/await? How is it related to Promises?
+A:  async/await is syntactic sugar over Promises for handling asynchronous
+    operations. A function marked "async" always returns a Promise.
+    "await" pauses execution until the Promise resolves.
+    In our project, Axios returns Promises — we handle them with .then().
+    The equivalent with async/await would be:
+      const res = await axios.get('/data/pizzas.json');
+      setPizzas(res.data);
+    Both approaches do the same thing, but async/await reads more linearly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q36: How does event handling work in React?
+A:  React uses SYNTHETIC EVENTS — a cross-browser wrapper around native
+    browser events. Key differences from vanilla JavaScript:
+    - Events are named in camelCase: onClick, onChange (not onclick)
+    - You pass a FUNCTION reference, not a string: onClick={handleClick}
+    - Event handlers receive a SyntheticEvent object
+    In our project: onClick for buttons, onChange for checkboxes and inputs,
+    onError for image fallback handling.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q37: What happens when you run "npm run dev"?
+A:  1. npm reads the "scripts" section in package.json
+    2. Finds "dev": "vite" — runs the Vite CLI
+    3. Vite starts a development server on http://localhost:5173
+    4. Vite reads vite.config.js to load plugins (React, Tailwind)
+    5. It serves index.html, which loads src/main.jsx
+    6. Vite uses Hot Module Replacement (HMR) — when you save a file,
+       only the changed module updates in the browser WITHOUT a full reload.
+       This preserves the current app state (like cart items).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q38: What happens when you run "npm run build"?
+A:  1. Vite bundles ALL source code into optimized production files
+    2. It processes JSX → JavaScript, applies Tailwind → CSS
+    3. It performs TREE SHAKING — removes unused code from the bundle
+    4. It performs CODE SPLITTING — splits vendor (React, Redux) from app code
+    5. Output goes to the /dist folder:
+       - index.html (entry point)
+       - assets/index-xxxx.js (JavaScript bundle, ~317 KB gzipped to ~104 KB)
+       - assets/index-xxxx.css (CSS bundle, ~20 KB gzipped to ~4.6 KB)
+    6. The /dist folder can be deployed to any static hosting.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q39: Explain the Checkout page flow in your project.
+A:  1. User clicks "Pay" button on the Cart page
+    2. handlePay() validates cart is not empty
+    3. navigate('/checkout', { state: { total } }) is called — this passes
+       the cart total to the Checkout page via React Router's location state
+    4. Checkout.jsx renders with the total from useLocation().state.total
+    5. useEffect on mount dispatches clearCart() to empty the Redux store
+    6. The total is still displayed correctly because it was passed via
+       route state, not read from the (now empty) Redux store
+    7. User clicks "Back to Home" → navigates to "/"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q40: What is the .map() method and how is it used for rendering lists?
+A:  .map() is a JavaScript array method that creates a new array by
+    transforming each element with a callback function. In React, it is
+    the standard way to render lists. Example from our OrderPizza.jsx:
+
+    {pizzas.map((pizza) => (
+      <div key={pizza.id}>
+        <h2>{pizza.name}</h2>
+        <p>₹{pizza.price}</p>
+      </div>
+    ))}
+
+    For each pizza in the array, .map() returns a JSX element. React then
+    renders all those elements. The key={pizza.id} helps React track which
+    items changed. We use .map() in OrderPizza, BuildPizza, and Cart pages.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
 
